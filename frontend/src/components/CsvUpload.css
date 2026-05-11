@@ -1,0 +1,21 @@
+#csv-upload-label {
+    font-size: 13px;
+    font-weight: 500px;
+    margin: 0 0 2px;
+    color: #111
+}
+
+#file-drop-zone {
+    display: none;
+}
+
+.csv-upload-subtext {
+    font-size: 12px;
+    color: #6b7280;
+    margin: 0
+}
+
+#remove-file {
+    color: #ef4444;
+    cursor: pointer
+}
