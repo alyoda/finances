@@ -1,11 +1,13 @@
 import './ImportPage.css'
 import CsvUpload from './CsvUpload.jsx'
+import TransactionTable from './TransactionTable.jsx'
 import React, { useState } from 'react';
 
 export default function ImportPage() {
     const [transactionsFile, setTransactionsFile] = useState(null);
     const [retirementFile, setContributionsFile] = useState(null);
-  
+    const [transactions, setTransactions] = useState(null);
+
     const handleSubmit = async () => {
       if (!transactionsFile || !retirementFile) {
         alert("Please add both a transactions and retirement file");
@@ -22,7 +24,7 @@ export default function ImportPage() {
       });
     
       const data = await res.json();
-      console.log(data);
+      setTransactions(data);
     };
 
     return <>
@@ -33,5 +35,6 @@ export default function ImportPage() {
         <CsvUpload label="Retirement contributions" onFileSelect={setContributionsFile}/>
     </div>
     <button onClick={handleSubmit} disabled={!transactionsFile || !retirementFile} style={{marginTop: "12px"}}>Upload and parse</button>
+    {transactions && <TransactionTable data={transactions} />}
     </>
 }

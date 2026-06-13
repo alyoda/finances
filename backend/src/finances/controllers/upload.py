@@ -1,13 +1,16 @@
 from finances.model.transactions import UploadResponse, Transaction, TransactionType
 import io, csv
 
+def serialize(t):
+    return {**vars(t), "type": t.type.name}
+
 async def handle_upload(transactions, retirement):
     expenses, income = await parse_transactions(transactions)
     retirement = await parse_retirement(retirement)
     return {
-        "expenses": [vars(t) for t in expenses],
-        "income": [vars(t) for t in income],
-        "retirement": [vars(t) for t in retirement]
+        "expenses": [serialize(t) for t in expenses],
+        "income": [serialize(t) for t in income],
+        "retirement": [serialize(t) for t in retirement]
     }
 
 async def process_file(file):
@@ -42,8 +45,9 @@ async def parse_retirement(file):
     retirement = []
 
     for row in reader:
-        if not 'Run Date' in row:
+        if not row['Description'] and not row['Amount ($)']:
             break
+        print(row)
         retirement.append(Transaction(row['Run Date'], row['Description'], row['Amount ($)'], 'Retirement', row['Account'], TransactionType.RETIREMENT))
     
     return retirement
