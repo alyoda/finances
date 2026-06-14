@@ -1,4 +1,5 @@
-import './TransactionTable.css'
+import './TransactionTable.css';
+import { Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 
 const SECTIONS = [
@@ -23,12 +24,18 @@ function TransactionSection({ label, rows, onChange }) {
         onChange(updated);
     };
 
+    const handleDelete = (index) => {
+        onChange(rows.filter((_, i) => i != index));
+    };
+
     return <div className="transaction-section">
         <h3>{label}</h3>
         <table className="transaction-table">
             <thead>
                 <tr>
                     {COLUMNS.map(col => <th key={col.key}>{col.label}</th>)}
+                    {/* Blank header row for delete button */}
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -38,10 +45,13 @@ function TransactionSection({ label, rows, onChange }) {
                             <td key={col.key}>
                                 <input
                                     value={row[col.key]}
-                                    onChange={(e) => handleCellChange(index, col.key, e.target.value)}
+                                    onChange={(e) => handleCellChange(e, index, col.key)}
                                 />
                             </td>
                         ))}
+                        <td>
+                        <button onClick={() => handleDelete(index)} ><Trash2 size={16} className="delete-row-button"/></button>
+                        </td>
                     </tr>
                 ))}
             </tbody>

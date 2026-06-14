@@ -1,12 +1,13 @@
-import './ImportPage.css'
-import CsvUpload from './CsvUpload.jsx'
-import TransactionTable from './TransactionTable.jsx'
+import CsvUpload from './CsvUpload.jsx';
+import './ImportPage.css';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ImportPage() {
     const [transactionsFile, setTransactionsFile] = useState(null);
     const [retirementFile, setContributionsFile] = useState(null);
-    const [transactions, setTransactions] = useState(null);
+
+    let navigate = useNavigate();
 
     const handleSubmit = async () => {
       if (!transactionsFile || !retirementFile) {
@@ -24,7 +25,7 @@ export default function ImportPage() {
       });
     
       const data = await res.json();
-      setTransactions(data);
+      navigate("/transactions", { state: data });
     };
 
     return <>
@@ -35,6 +36,5 @@ export default function ImportPage() {
         <CsvUpload label="Retirement contributions" onFileSelect={setContributionsFile}/>
     </div>
     <button onClick={handleSubmit} disabled={!transactionsFile || !retirementFile} style={{marginTop: "12px"}}>Upload and parse</button>
-    {transactions && <TransactionTable data={transactions} />}
     </>
 }
